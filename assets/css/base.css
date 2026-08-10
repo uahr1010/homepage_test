@@ -1,0 +1,132 @@
+/* ==========================================================================
+   base.css — 리셋 · 디자인 토큰 · 타이포그래피
+   색/폰트/여백을 바꾸고 싶으면 이 파일의 :root 변수만 수정하면 됩니다.
+   ========================================================================== */
+
+:root {
+  /* ---- 브랜드 컬러 (화이트 + 블루) ---- */
+  --c-navy:      #0A2540;   /* 가장 진한 남색 - 다크 섹션 배경 */
+  --c-navy-2:    #0F3358;
+  --c-blue:      #0B5FCE;   /* 메인 블루 - 버튼, 링크, 강조 */
+  --c-blue-dark: #084BA3;
+  --c-blue-mid:  #2E7BE0;
+  --c-blue-soft: #7FB2F0;
+  --c-tint:      #EFF5FD;   /* 아주 연한 블루 배경 */
+  --c-tint-2:    #DCEAFA;
+
+  --c-white:     #FFFFFF;
+  --c-ink:       #12233A;   /* 본문 텍스트 */
+  --c-muted:     #5B6B7F;   /* 보조 텍스트 */
+  --c-line:      #DCE5EF;   /* 구분선 */
+  --c-line-soft: #EDF2F8;
+
+  /* ---- 폰트 ---- */
+  --font-sans: "Pretendard", "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+               "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕",
+               "Noto Sans KR", Roboto, sans-serif;
+  --font-display: "Playfair Display", "Nanum Myeongjo", Georgia, "Batang", serif;
+
+  /* ---- 타이포 스케일 ---- */
+  --fs-hero:    clamp(2.75rem, 8vw, 6.5rem);
+  --fs-h2:      clamp(1.9rem, 4vw, 3.25rem);
+  --fs-h3:      clamp(1.35rem, 2.4vw, 2rem);
+  --fs-lead:    clamp(1rem, 1.4vw, 1.175rem);
+  --fs-body:    1rem;
+  --fs-small:   0.875rem;
+  --fs-xs:      0.78rem;
+
+  /* ---- 간격 ---- */
+  --sp-1: 0.5rem;  --sp-2: 1rem;   --sp-3: 1.5rem;
+  --sp-4: 2rem;    --sp-5: 3rem;   --sp-6: 4.5rem;
+  --sp-7: 7rem;
+
+  /* ---- 레이아웃 ---- */
+  --shell:      1240px;
+  --shell-pad:  clamp(1.25rem, 5vw, 3rem);
+  --header-h:   76px;
+  --radius:     14px;
+  --radius-lg:  22px;
+
+  --shadow-sm: 0 2px 8px rgba(10, 37, 64, .06);
+  --shadow:    0 12px 32px rgba(10, 37, 64, .10);
+  --shadow-lg: 0 28px 60px rgba(10, 37, 64, .16);
+
+  /* 이미지 자리표시 배경 (사진 업로드 전에 보이는 블루 그라디언트) */
+  --ph: linear-gradient(135deg, #EFF5FD 0%, #DCEAFA 55%, #7FB2F0 100%);
+
+  --ease: cubic-bezier(.22, .8, .28, 1);
+}
+
+/* ---- 리셋 ---- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html {
+  scroll-behavior: smooth;
+  /* 고정 헤더에 앵커 제목이 가려지지 않도록 */
+  scroll-padding-top: var(--header-h);
+  -webkit-text-size-adjust: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  color: var(--c-ink);
+  background: var(--c-white);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  word-break: keep-all;   /* 한국어 줄바꿈을 어절 단위로 */
+}
+body.is-locked { overflow: hidden; }
+
+img, svg, video { display: block; max-width: 100%; height: auto; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; padding: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--c-blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* 앵커 이동 시 섹션 상단 여백 확보 */
+[id] { scroll-margin-top: calc(var(--header-h) + 8px); }
+
+/* ---- 타이포그래피 ---- */
+h1, h2, h3, h4 { line-height: 1.18; font-weight: 700; letter-spacing: -.02em; }
+
+.eyebrow {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--c-blue);
+  margin-bottom: var(--sp-2);
+}
+
+.prose p { margin-bottom: 1.05em; color: var(--c-muted); }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--c-ink); }
+
+/* ---- 유틸 ---- */
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--shell-pad);
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* 사진이 아직 업로드되지 않았거나 경로가 틀렸을 때, 깨진 아이콘 대신
+   컨테이너에 깔린 --ph (placeholder) 그라디언트가 보이도록 이미지를 감춥니다. */
+img.is-missing { display: none !important; }
