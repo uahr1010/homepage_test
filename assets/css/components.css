@@ -112,6 +112,7 @@
   display: flex; flex-direction: column;
   background: var(--c-white); border: 1px solid var(--c-line);
   border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: var(--shadow-sm);
   transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s;
 }
 .method:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--c-blue-soft); }
@@ -174,6 +175,7 @@
   display: flex; flex-direction: column; height: 100%;
   background: var(--c-white); border: 1px solid var(--c-line);
   border-radius: var(--radius-lg); overflow: hidden; text-align: left;
+  box-shadow: var(--shadow-sm);
   transition: transform .3s var(--ease), box-shadow .3s var(--ease);
 }
 .card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
@@ -321,18 +323,22 @@
   font-size: var(--fs-small); box-shadow: var(--shadow);
 }
 
-/* ---------- 스크롤 등장 애니메이션 ---------- */
-.reveal {
+/* ---------- 스크롤 등장 애니메이션 ----------
+   반드시 `.js-anim` 이 붙어 있을 때만 숨깁니다. (index.html 상단 인라인 스크립트 참고)
+   플래그 없이 `.reveal { opacity: 0 }` 로 두면, 자바스크립트가 멈추거나
+   탭이 백그라운드에서 로드돼 트랜지션이 진행되지 않을 때
+   페이지 전체가 반투명하게(뿌옇게) 굳어 버립니다. 이 줄을 다시 풀지 마세요. */
+.js-anim .reveal {
   opacity: 0; transform: translateY(24px);
   transition: opacity .7s var(--ease), transform .7s var(--ease);
 }
-.reveal.is-in { opacity: 1; transform: none; }
-.reveal[data-delay="1"] { transition-delay: .08s; }
-.reveal[data-delay="2"] { transition-delay: .16s; }
-.reveal[data-delay="3"] { transition-delay: .24s; }
-.reveal[data-delay="4"] { transition-delay: .32s; }
+.js-anim .reveal.is-in { opacity: 1; transform: none; }
+.js-anim .reveal[data-delay="1"] { transition-delay: .08s; }
+.js-anim .reveal[data-delay="2"] { transition-delay: .16s; }
+.js-anim .reveal[data-delay="3"] { transition-delay: .24s; }
+.js-anim .reveal[data-delay="4"] { transition-delay: .32s; }
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; }
+  .js-anim .reveal { opacity: 1; transform: none; transition: none; }
 }
 
 @media (max-width: 860px) {
