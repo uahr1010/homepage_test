@@ -1,11 +1,9 @@
 /* ==========================================================================
    atlas.css — 시네마틱 껍데기
 
-   참고 디자인(SEN_homepage.html)의 구조를 따릅니다.
-     · #scroll-space : 스크롤 길이만 만들어 주는 빈 칸
-     · #stage        : 화면에 고정된 무대
-     · .scene        : 무대 위에 겹쳐 둔 장면들. 스크롤 위치에 따라 교차 전환
-   장면 전환은 atlas.js 가 opacity/transform 을 직접 넣어 처리합니다.
+   참고 디자인(SEN_homepage.html)의 색·타이포·구성을 따르되,
+   장면을 겹쳐 교차 전환하는 방식은 쓰지 않습니다.
+   섹션(.scene)이 위에서 아래로 그냥 이어지는 평범한 세로 스크롤입니다.
 
    섹션 안쪽 내용(카드·타임라인·채용 아코디언)은 기존 components.css 를 그대로 씁니다.
    여기서는 색만 이 디자인에 맞게 덮어씁니다.
@@ -39,49 +37,32 @@ body {
   overflow-x: hidden;
 }
 
-/* ── 기본값은 '평범한 세로 페이지' 입니다 ──
-   자바스크립트가 살아 있을 때만 <html> 에 .js-stage 가 붙고,
-   그때 비로소 무대가 고정되며 장면이 겹칩니다.
-   JS 가 죽거나 백그라운드 탭에서 열려도 내용이 겹쳐 보이지 않도록 하기 위함입니다.
-   (이 갈래를 지우면 장면 5개가 한꺼번에 겹쳐 보입니다) */
-#scroll-space { display: none; }
-#stage { position: static; }
+/* 섹션은 위에서 아래로 그냥 이어집니다.
+   예전에는 #stage 를 고정해 두고 장면을 겹쳐 교차 전환했는데,
+   스크롤할 때마다 창이 통째로 바뀌는 느낌이라 걷어냈습니다.
+   (되살리려면 무대 고정 + 장면 겹침이 필요하지만, 권하지 않습니다) */
 .scene {
-  position: relative; min-height: 100vh;
-  display: grid; place-items: center;
+  position: relative;
+  padding: clamp(72px, 10vh, 128px) 0;
   overflow-x: hidden;
 }
 .scene[hidden] { display: none; }
+.scene + .scene { border-top: 1px solid var(--line); }
 
-/* 스크롤 길이. 장면을 늘리면 이 높이도 같이 키워야 장면당 스크롤 양이 유지됩니다. */
-.js-stage #scroll-space { display: block; height: 700vh; }
-.js-stage #stage { position: fixed; inset: 0; overflow: hidden; z-index: 1; }
-.js-stage .scene {
-  position: absolute; inset: 0; min-height: 0;
-  will-change: transform, opacity;
-  /* ⚠️ 여기에 overflow-y:auto / overscroll-behavior:contain 을 넣지 마세요.
-     장면이 화면 전체를 덮고 있어서, 그러면 휠 이벤트를 장면이 먹어 버리고
-     페이지로 넘기지 않아 스크롤이 통째로 멈춥니다.
-     장면 안에서 넘치는 내용은 .scene__scroll 이 따로 처리합니다. */
-  overflow: hidden;
-}
 .scene__inner {
   width: min(1180px, 92vw);
   margin: 0 auto;
-  padding: clamp(72px, 9vh, 104px) 0 clamp(24px, 4vh, 48px);
 }
-/* 무대 방식에서는 장면이 딱 한 화면입니다.
-   그래도 내용이 넘치면 여기서 스크롤됩니다 — 끝에 닿으면 페이지 스크롤로 이어집니다.
-   (overscroll-behavior 를 건드리면 그 이어짐이 끊기니 넣지 마세요) */
-.js-stage .scene__inner { max-height: 100vh; overflow-y: auto; }
-.js-stage .scene__inner::-webkit-scrollbar { width: 0; }
 
 /* 밝은 장면 (회사소개·프로젝트·뉴스·채용) */
 .scene--paper { background: var(--paper); }
 .scene--paper .scene__inner { color: var(--ink); }
 
 /* ---------- 장면 1 : 인트로 영상 ---------- */
-#scene-intro { padding: 0; place-items: stretch; overflow: hidden; }
+#scene-intro {
+  padding: 0; overflow: hidden;
+  min-height: 100vh; display: grid; place-items: stretch;
+}
 #scene-intro .intro__media { position: absolute; inset: 0; }
 #scene-intro .intro__poster {
   position: absolute; inset: 0;
@@ -201,10 +182,9 @@ body {
   font-size: clamp(.95rem, 1.2vw, 1.08rem); line-height: 1.75;
 }
 
-/* 장면 안에서 스크롤이 필요한 긴 내용 */
-.scene__scroll { max-height: 40vh; overflow-y: auto; padding-right: 10px; }
-.scene__scroll::-webkit-scrollbar { width: 6px; }
-.scene__scroll::-webkit-scrollbar-thumb { background: var(--paper-2); border-radius: 999px; }
+/* 예전 무대 방식에서 쓰던 안쪽 스크롤 칸.
+   지금은 페이지가 통째로 스크롤되므로 높이를 제한하지 않고 그대로 흐르게 둡니다. */
+.scene__scroll { max-height: none; overflow: visible; }
 
 /* 회사소개는 항목이 많아 2단으로 */
 .about-grid {
@@ -212,17 +192,13 @@ body {
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   align-items: start;
 }
-.about-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--sp-3, 1.5rem); }
-.about-tabs button {
-  padding: 8px 16px; border-radius: 999px; font-size: .85rem; font-weight: 700;
-  border: 1px solid var(--line); background: #fff; color: var(--dim);
-  transition: all .2s ease;
+/* 회사소개 하위 덩어리 (CEO 인사말 / 연혁 / 주요공법 / CONTACT).
+   예전에는 탭으로 접어 뒀지만, 스크롤로 쭉 읽히도록 펼쳐 두었습니다. */
+.about-block + .about-block { margin-top: clamp(48px, 8vh, 88px); }
+.about-block > .block__title {
+  font-size: clamp(20px, 2.4vw, 30px); font-weight: 800;
+  letter-spacing: -.02em; margin-bottom: 10px;
 }
-.about-tabs button.is-on { background: var(--ink); border-color: var(--ink); color: #fff; }
-.about-panel[hidden] { display: none; }
-
-/* 지구본은 화면 높이에 맞춰 줄어듭니다 (세로가 짧은 화면에서 잘리지 않도록) */
-.js-stage .globe__stage { max-width: min(660px, 46vh); }
 
 @media (max-width: 900px) {
   .about-grid { grid-template-columns: 1fr; }
@@ -234,10 +210,3 @@ body {
 }
 
 /* 모션을 줄이는 설정이면 장면을 겹치지 않고 그냥 이어 붙입니다 */
-@media (prefers-reduced-motion: reduce) {
-  .js-stage #stage { position: static; }
-  .js-stage #scroll-space { display: none; }
-  .js-stage .scene {
-    position: relative; opacity: 1 !important; transform: none !important; min-height: 100vh;
-  }
-}

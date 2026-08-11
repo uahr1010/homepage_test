@@ -22,18 +22,8 @@
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/atlas.css">
 
-<!-- 고정 무대 방식을 쓸지 여기서 먼저 정합니다.
-     JS 가 살아 있을 때만 .js-stage 가 붙고, 그때만 장면이 겹쳐집니다.
-     붙지 않으면 평범한 세로 스크롤 페이지로 보입니다 (내용은 항상 읽을 수 있게).
-     ※ CSS 링크 뒤, 첫 화면 그리기 전에 실행돼야 하므로 위치를 옮기지 마세요. -->
-<script>
-try { document.documentElement.className += ' js-stage'; } catch (e) {}
-</script>
 </head>
 <body>
-
-<!-- 스크롤 길이만 만들어 주는 빈 칸. 실제 내용은 아래 #stage 안에 있습니다. -->
-<div id="scroll-space"></div>
 
 <!-- ============ 상단 고정 네비 ============ -->
 <header class="topbar">
@@ -65,8 +55,7 @@ try { document.documentElement.className += ' js-stage'; } catch (e) {}
 
 <nav id="prog" aria-label="장면 이동"></nav>
 
-<!-- ============ 고정 무대 ============ -->
-<div id="stage">
+<main id="top">
 
   <!-- ---------- 장면 0 : 인트로 영상 ---------- -->
   <section class="scene scene--dark" id="scene-intro" data-label="인트로">
@@ -92,14 +81,7 @@ try { document.documentElement.className += ' js-stage'; } catch (e) {}
         <p class="scene__lead" data-bind="about.section.lead"></p>
       </header>
 
-      <div class="about-tabs" data-about-tabs>
-        <button type="button" data-panel="ceo" class="is-on" data-bind="site.nav.sub.ceo">CEO 인사말</button>
-        <button type="button" data-panel="history" data-bind="site.nav.sub.history">회사연혁</button>
-        <button type="button" data-panel="methods" data-bind="site.nav.sub.methods">주요공법</button>
-        <button type="button" data-panel="contact" data-bind="site.nav.sub.contact">CONTACT</button>
-      </div>
-
-      <div class="about-panel" data-about-panel="ceo">
+      <div class="about-block" id="about-ceo">
         <div class="about-grid">
           <div class="ceo__media"><img data-src="about.ceo.photo" alt="" loading="lazy"></div>
           <div>
@@ -120,19 +102,19 @@ try { document.documentElement.className += ' js-stage'; } catch (e) {}
         </div>
       </div>
 
-      <div class="about-panel" data-about-panel="history" hidden>
+      <div class="about-block" id="about-history">
         <h3 class="block__title" data-bind="about.history.heading"></h3>
         <p class="scene__lead" data-bind="about.history.lead"></p>
         <div class="scene__scroll"><div class="timeline" data-list="about.history.items"></div></div>
       </div>
 
-      <div class="about-panel" data-about-panel="methods" hidden>
+      <div class="about-block" id="about-methods">
         <h3 class="block__title" data-bind="about.methods.heading"></h3>
         <p class="scene__lead" data-bind="about.methods.lead"></p>
         <div class="scene__scroll"><div class="methods" data-list="about.methods.items"></div></div>
       </div>
 
-      <div class="about-panel" data-about-panel="contact" hidden>
+      <div class="about-block" id="about-contact">
         <h3 class="block__title" data-bind="about.contact.heading"></h3>
         <p class="scene__lead" data-bind="about.contact.lead"></p>
         <div class="scene__scroll"><div class="offices" data-list="about.contact.offices"></div></div>
@@ -206,7 +188,7 @@ try { document.documentElement.className += ' js-stage'; } catch (e) {}
     </div>
   </section>
 
-</div>
+</main>
 
 <script src="assets/js/i18n.js"></script>
 <script src="assets/js/render.js"></script>

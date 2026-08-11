@@ -1,96 +1,65 @@
 /* ==========================================================================
-   atlas.js — 시네마틱 껍데기의 동작
+   atlas.js — 상단 네비 · 스크롤 위치 표시
 
-   · 스크롤 위치를 0~1 로 환산해 장면을 교차 전환합니다.
-   · 상단 메뉴 / 오른쪽 점 = 해당 장면의 스크롤 위치로 이동.
+   페이지는 평범한 세로 스크롤입니다.
+   예전에는 화면에 고정된 무대 위에서 장면을 교차 전환했는데,
+   스크롤할 때마다 창이 통째로 바뀌는 느낌이라 걷어냈습니다.
+   지금은 섹션이 그냥 위에서 아래로 이어지고, 이 파일은 세 가지만 합니다.
 
-   장면을 추가·삭제하면 atlas.css 의 #scroll-space 높이도 같이 손봐야
-   장면당 스크롤 양이 비슷하게 유지됩니다. (현재 5장면 / 700vh)
+     · 메뉴 / 오른쪽 점을 누르면 해당 섹션으로 부드럽게 이동
+     · 지금 보고 있는 섹션의 메뉴에 표시
+     · 인트로 위에서는 투명 헤더, 그 아래에서는 흰 헤더
    ========================================================================== */
 window.SEN = window.SEN || {};
 
 (function (SEN) {
   'use strict';
 
-  var scenes = [], dots = [], navBtns = [], stage, topbar;
-  var N = 0, cur = -1, ticking = false;
+  var sections = [], dots = [], navBtns = [], topbar;
+  var cur = -1, ticking = false;
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function init() {
-    stage = document.getElementById('stage');
     topbar = document.querySelector('.topbar');
-    if (!stage) return;
-
-    scenes = [].slice.call(stage.querySelectorAll('.scene'));
-    N = scenes.length;
-    if (!N) return;
+    sections = [].slice.call(document.querySelectorAll('.scene'));
+    if (!sections.length) return;
 
     buildProgress();
     initNav();
     initLang();
-    initAboutTabs();
 
-    if (reduce) {                       /* 모션 최소화 — 장면을 그냥 이어 붙입니다 */
-      scenes.forEach(function (s) { s.style.opacity = 1; s.hidden = false; });
-      setActive(0);
-      return;
-    }
-
+    onScroll();
     addEventListener('scroll', onScroll, { passive: true });
     addEventListener('resize', onScroll);
-    /* 첫 배치는 rAF 를 거치지 않고 바로 그립니다.
-       숨겨진 탭에서 열리면 rAF 가 아예 돌지 않아, 여기서 안 그리면
-       장면 5개가 겹친 상태로 남습니다. */
-    paint(progress());
   }
 
-  /* ---------- 스크롤 → 장면 ---------- */
-  function progress() {
-    var max = document.documentElement.scrollHeight - innerHeight;
-    return max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+  /** 고정 헤더에 제목이 가리지 않도록 그 높이만큼 빼고 이동합니다 */
+  function headerH() { return topbar ? topbar.offsetHeight - 1 : 0; }
+
+  function goTo(i) {
+    var el = sections[i];
+    if (!el) return;
+    scrollTo({
+      top: el.getBoundingClientRect().top + scrollY - headerH(),
+      behavior: reduce ? 'auto' : 'smooth'
+    });
   }
 
-  /** 장면 i 가 화면 한가운데 오는 스크롤 위치 (0~1)
-      첫 장면은 맨 위(0), 마지막 장면은 맨 아래(1) 에 놓입니다.
-      (i+0.5)/N 으로 잡으면 p=0 일 때 첫 장면이 구간 경계에 걸려 사라집니다) */
-  function centerOf(i) { return N > 1 ? i / (N - 1) : 0; }
-
+  /* ---------- 지금 보고 있는 섹션 ----------
+     헤더 바로 아래 지점이 어느 섹션 안에 있는지로 판단합니다.
+     (IntersectionObserver 로 하면 섹션 높이가 제각각일 때 경계가 흔들립니다) */
   function onScroll() {
     if (ticking) return;
     ticking = true;
     requestAnimationFrame(function () {
       ticking = false;
-      paint(progress());
-    });
-  }
-
-  function paint(p) {
-    var nearest = 0, best = 9;
-
-    var span = Math.max(1, N - 1);
-    scenes.forEach(function (el, i) {
-      /* d = 이웃 장면까지의 거리를 1 로 본 상대 위치. 0 이면 정중앙 */
-      var d = (p - centerOf(i)) * span;
-      var ad = Math.abs(d);
-      if (ad < best) { best = ad; nearest = i; }
-
-      /* 0.25 까지는 또렷하게, 0.75 에서 완전히 사라지도록.
-         두 장면 사이 한가운데(0.5)에서는 둘 다 50% 로 겹칩니다. */
-      var vis = ad >= 0.75 ? 0 : ad <= 0.25 ? 1 : 1 - (ad - 0.25) / 0.5;
-
-      if (vis <= 0) {
-        if (!el.hidden) { el.hidden = true; el.style.opacity = 0; }
-        return;
+      var line = scrollY + headerH() + 8;
+      var idx = 0;
+      for (var i = 0; i < sections.length; i++) {
+        if (sections[i].offsetTop <= line) idx = i;
       }
-      if (el.hidden) el.hidden = false;
-      el.style.opacity = vis.toFixed(3);
-      /* 다음 장면은 살짝 확대되며 들어오고, 지나간 장면은 축소되며 물러납니다 */
-      el.style.transform = 'scale(' + (1 - 0.05 * ad).toFixed(4) + ') translateY(' +
-        (d * -26).toFixed(1) + 'px)';
-      el.style.zIndex = Math.round(100 - ad * 100);
+      setActive(idx);
     });
-
-    setActive(nearest);
   }
 
   function setActive(i) {
@@ -100,23 +69,17 @@ window.SEN = window.SEN || {};
     navBtns.forEach(function (b) {
       b.classList.toggle('is-on', +b.getAttribute('data-scene') === i);
     });
-    /* 인트로(어두운 영상) 위에서는 투명 헤더, 나머지 밝은 장면에서는 흰 헤더 */
-    if (topbar) topbar.classList.toggle('is-light', !scenes[i].classList.contains('scene--dark'));
-  }
-
-  function goTo(i) {
-    var max = document.documentElement.scrollHeight - innerHeight;
-    scrollTo({ top: centerOf(i) * max, behavior: reduce ? 'auto' : 'smooth' });
+    if (topbar) topbar.classList.toggle('is-light', !sections[i].classList.contains('scene--dark'));
   }
 
   /* ---------- 오른쪽 진행 점 ---------- */
   function buildProgress() {
     var host = document.getElementById('prog');
     if (!host) return;
-    dots = scenes.map(function (s, i) {
+    dots = sections.map(function (s, i) {
       var b = document.createElement('button');
       b.type = 'button';
-      b.setAttribute('aria-label', (s.getAttribute('data-label') || '') + ' 장면으로 이동');
+      b.setAttribute('aria-label', (s.getAttribute('data-label') || '') + ' 로 이동');
       b.addEventListener('click', function () { goTo(i); });
       host.appendChild(b);
       return b;
@@ -148,23 +111,6 @@ window.SEN = window.SEN || {};
       });
     });
     document.addEventListener('click', function () { wrap.classList.remove('is-open'); });
-  }
-
-  /* ---------- 회사소개 탭 (CEO / 연혁 / 공법 / CONTACT) ---------- */
-  function initAboutTabs() {
-    var tabs = document.querySelector('[data-about-tabs]');
-    if (!tabs) return;
-    tabs.addEventListener('click', function (e) {
-      var b = e.target.closest('button[data-panel]');
-      if (!b) return;
-      var name = b.getAttribute('data-panel');
-      tabs.querySelectorAll('button').forEach(function (x) {
-        x.classList.toggle('is-on', x === b);
-      });
-      document.querySelectorAll('[data-about-panel]').forEach(function (p) {
-        p.hidden = p.getAttribute('data-about-panel') !== name;
-      });
-    });
   }
 
   SEN.atlas = { init: init, goTo: goTo };
