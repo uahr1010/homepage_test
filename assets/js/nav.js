@@ -159,39 +159,6 @@ window.SEN = window.SEN || {};
     });
   }
 
-  /* ---------- 7. 프로젝트 모달 ---------- */
-  function initModal() {
-    var modal = document.querySelector('[data-modal]');
-    var body = modal && modal.querySelector('[data-modal-body]');
-    if (!modal) return;
-
-    function open(html) {
-      body.innerHTML = html;
-      modal.hidden = false;
-      document.body.classList.add('is-locked');
-    }
-    function close() {
-      modal.hidden = true;
-      body.innerHTML = '';
-      document.body.classList.remove('is-locked');
-    }
-
-    document.addEventListener('click', function (e) {
-      if (e.target.closest('[data-modal-close]')) { close(); return; }
-
-      var card = e.target.closest('[data-project]');
-      if (!card) return;
-      var id = card.getAttribute('data-project');
-      var list = (SEN.data.projects && SEN.data.projects.items) || [];
-      var p = list.filter(function (x, i) { return String(x.id || i) === id; })[0];
-      if (p) open(SEN.util.projectModalHTML(p, SEN.data));
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !modal.hidden) close();
-    });
-  }
-
   /* ---------- 8. 필터 칩 + 더보기 ---------- */
   function initListControls() {
     document.addEventListener('click', function (e) {
@@ -220,7 +187,6 @@ window.SEN = window.SEN || {};
     initDrawer();
     initLangSwitch();
     initJobs();
-    initModal();
     initListControls();
     initSpy();
   }

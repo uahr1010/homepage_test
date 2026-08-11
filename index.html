@@ -229,11 +229,18 @@
         <p class="section__lead" data-bind="projects.section.lead"></p>
       </header>
 
-      <div class="chips" data-projectfilter></div>
-      <div class="cards cards--projects" data-list="projects.items"></div>
-      <div class="more">
-        <button class="btn btn--ghost" type="button" data-more="projects" data-bind="site.ui.loadMore"></button>
+      <!-- 실적 지구본. 데이터는 uploads/data/projects.xlsx 의 A열(주소)에서 나옵니다. -->
+      <div class="globe reveal">
+        <div class="globe__stage" data-globe>
+          <div class="globe__pills" data-globe-pills aria-hidden="true"></div>
+          <div class="globe__tip" data-globe-tip hidden></div>
+        </div>
+        <p class="globe__hint" data-globe-hint></p>
       </div>
+
+      <!-- 지구본이 못 뜨는 환경(WebGL 미지원 등)에서도 숫자는 남습니다 -->
+      <dl class="globe__stats reveal" data-globe-stats></dl>
+      <ol class="regions reveal" data-region-list></ol>
     </div>
   </section>
 
@@ -279,16 +286,12 @@
 </footer>
 
 <!-- 프로젝트 상세 모달 -->
-<div class="modal" data-modal hidden>
-  <div class="modal__backdrop" data-modal-close></div>
-  <div class="modal__panel" role="dialog" aria-modal="true">
-    <button class="modal__close" type="button" data-modal-close aria-label="닫기">&times;</button>
-    <div class="modal__body" data-modal-body></div>
-  </div>
 </div>
 
 <script src="assets/js/i18n.js"></script>
 <script src="assets/js/render.js"></script>
+<script src="assets/js/projects.js"></script>
+<script src="assets/js/globe.js"></script>
 <script src="assets/js/nav.js"></script>
 <script src="assets/js/reveal.js"></script>
 <script src="assets/js/main.js"></script>

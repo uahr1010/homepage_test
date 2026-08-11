@@ -1,154 +1,60 @@
 {
   "section": {
-    "eyebrow": { "ko": "03 — PROJECTS", "en": "03 — PROJECTS", "zh": "03 — 项目", "ja": "03 — プロジェクト" },
-    "title": { "ko": "프로젝트", "en": "Projects", "zh": "项目实绩", "ja": "プロジェクト" },
+    "eyebrow": {
+      "ko": "03 — PROJECTS",
+      "en": "03 — PROJECTS",
+      "zh": "03 — 项目",
+      "ja": "03 — プロジェクト"
+    },
+    "title": {
+      "ko": "프로젝트",
+      "en": "Projects",
+      "zh": "项目实绩",
+      "ja": "プロジェクト"
+    },
     "lead": {
-      "ko": "국내외 주요 프로젝트에 적용된 구조 솔루션입니다. 카드를 클릭하면 상세 정보를 볼 수 있습니다. (※ 아래는 예시 데이터입니다)",
-      "en": "Structural solutions delivered on major projects in Korea and abroad. Click a card for details. (Sample data.)",
-      "zh": "在国内外主要项目中应用的结构解决方案。点击卡片可查看详情。（以下为示例数据）",
-      "ja": "国内外の主要プロジェクトに適用した構造ソリューションです。カードをクリックすると詳細を表示します。（以下はサンプルデータです）"
+      "ko": "1973년부터 국내외에서 수행한 구조설계·진단·시공 실적입니다. 지구본을 돌려 지역별 실적을 확인해 보세요.",
+      "en": "Structural design, diagnostics and construction delivered in Korea and abroad since 1973. Spin the globe to see our work by region.",
+      "zh": "自1973年以来在国内外完成的结构设计、诊断与施工业绩。转动地球查看各地区实绩。",
+      "ja": "1973年以来、国内外で手がけた構造設計・診断・施工の実績です。地球儀を回して地域別の実績をご覧ください。"
     }
   },
-
-  "labels": {
-    "client":   { "ko": "발주처", "en": "Client",   "zh": "业主",   "ja": "発注者" },
-    "location": { "ko": "위치",   "en": "Location", "zh": "地点",   "ja": "所在地" },
-    "year":     { "ko": "준공",   "en": "Completed","zh": "竣工",   "ja": "竣工" },
-    "scale":    { "ko": "규모",   "en": "Scale",    "zh": "规模",   "ja": "規模" }
-  },
-
-  "items": [
-    {
-      "id": "prj-datacenter",
-      "image": "/uploads/images/project-01.jpg",
-      "methods": ["PSRC", "TSC"],
-      "name": { "ko": "[더미] 수도권 AI 데이터센터", "en": "[dummy] Metropolitan AI Data Centre", "zh": "[样例] 首都圈AI数据中心", "ja": "[ダミー] 首都圏AIデータセンター" },
-      "client": { "ko": "OO통신", "en": "OO Telecom", "zh": "OO通信", "ja": "OO通信" },
-      "location": { "ko": "경기도", "en": "Gyeonggi-do, Korea", "zh": "京畿道", "ja": "京畿道" },
-      "year": "2026",
-      "scale": { "ko": "지하 2층 / 지상 8층, 연면적 48,000㎡", "en": "B2 / 8F, GFA 48,000㎡", "zh": "地下2层／地上8层，建筑面积48,000㎡", "ja": "地下2階／地上8階、延床面積48,000㎡" },
-      "summary": {
-        "ko": "PSRC 기둥과 TSC 보 조합으로 골조 공기를 1년에서 2개월 수준으로 단축한 사례입니다.",
-        "en": "PSRC columns combined with TSC beams cut the frame programme from a year to about two months.",
-        "zh": "采用PSRC柱与TSC梁组合，将主体工期从一年缩短至约两个月。",
-        "ja": "PSRC柱とTSC梁の組合せにより躯体工期を1年から約2か月に短縮した事例です。"
-      },
-      "description": {
-        "ko": "여기에 프로젝트 상세 설명을 작성합니다. 문단을 나누려면 줄바꿈을 두 번 입력하세요.\n\n구조 개요, 적용 공법, 시공상 특이사항, 성과 등을 자유롭게 기술할 수 있습니다. 이 문장은 Pages CMS 입력 예시를 위한 더미 텍스트입니다.",
-        "en": "Write the detailed project description here. Use a blank line to start a new paragraph.\n\nStructural outline, systems applied, construction highlights and outcomes can all be described freely. This is dummy text illustrating the Pages CMS field.",
-        "zh": "在此撰写项目详细说明。换两行即可分段。\n\n可自由描述结构概要、所用工法、施工要点与成果。此段为演示 Pages CMS 输入的示例文字。",
-        "ja": "ここにプロジェクトの詳細説明を記入します。段落を分けるには改行を2回入力してください。\n\n構造概要、適用工法、施工上の特記事項、成果などを自由に記述できます。この文章は Pages CMS 入力例のダミーテキストです。"
-      }
+  "ui": {
+    "dragHint": {
+      "ko": "드래그하면 돌아갑니다 · 점에 마우스를 올리면 지역별 건수가 보입니다",
+      "en": "Drag to rotate · hover a dot to see the regional count",
+      "zh": "拖动可旋转 · 将鼠标悬停在点上可查看该地区数量",
+      "ja": "ドラッグで回転 · 点にカーソルを合わせると地域別件数が表示されます"
     },
-    {
-      "id": "prj-sg-innovation",
-      "image": "/uploads/images/project-02.jpg",
-      "methods": ["PSRC", "TSC"],
-      "name": { "ko": "[더미] 싱가포르 이노베이션 센터", "en": "[dummy] Innovation Centre, Singapore", "zh": "[样例] 新加坡创新中心", "ja": "[ダミー] シンガポール・イノベーションセンター" },
-      "client": { "ko": "OO그룹", "en": "OO Group", "zh": "OO集团", "ja": "OOグループ" },
-      "location": { "ko": "싱가포르", "en": "Singapore", "zh": "新加坡", "ja": "シンガポール" },
-      "year": "2023",
-      "scale": { "ko": "지상 7층, 연면적 90,000㎡", "en": "7F, GFA 90,000㎡", "zh": "地上7层，建筑面积90,000㎡", "ja": "地上7階、延床面積90,000㎡" },
-      "summary": {
-        "ko": "해외 기준을 만족하는 합성구조 설계로 현지 규제와 시공 조건을 동시에 해결했습니다.",
-        "en": "A composite structure satisfying overseas codes while resolving local regulatory and site constraints.",
-        "zh": "以满足海外规范的组合结构设计，同时解决当地法规与施工条件。",
-        "ja": "海外基準を満たす合成構造設計により、現地規制と施工条件を同時に解決しました。"
-      },
-      "description": {
-        "ko": "여기에 프로젝트 상세 설명을 작성합니다.\n\n이 문장은 Pages CMS 입력 예시를 위한 더미 텍스트입니다.",
-        "en": "Write the detailed project description here.\n\nThis is dummy text illustrating the Pages CMS field.",
-        "zh": "在此撰写项目详细说明。\n\n此段为演示 Pages CMS 输入的示例文字。",
-        "ja": "ここにプロジェクトの詳細説明を記入します。\n\nこの文章は Pages CMS 入力例のダミーテキストです。"
-      }
+    "totalLabel": {
+      "ko": "누적 실적",
+      "en": "Total projects",
+      "zh": "累计实绩",
+      "ja": "累計実績"
     },
-    {
-      "id": "prj-kepco",
-      "image": "/uploads/images/project-03.jpg",
-      "methods": ["TSC"],
-      "name": { "ko": "[더미] 공공기관 업무시설", "en": "[dummy] Public Agency Office Complex", "zh": "[样例] 公共机关办公设施", "ja": "[ダミー] 公共機関業務施設" },
-      "client": { "ko": "OO공사", "en": "OO Corporation", "zh": "OO公社", "ja": "OO公社" },
-      "location": { "ko": "전라남도", "en": "Jeollanam-do, Korea", "zh": "全罗南道", "ja": "全羅南道" },
-      "year": "2025",
-      "scale": { "ko": "지상 12층, 연면적 32,000㎡", "en": "12F, GFA 32,000㎡", "zh": "地上12层，建筑面积32,000㎡", "ja": "地上12階、延床面積32,000㎡" },
-      "summary": {
-        "ko": "TSC 합성보 적용으로 층고를 낮추고 설비 공간을 확보했습니다.",
-        "en": "TSC composite beams reduced floor-to-floor height while creating MEP space.",
-        "zh": "采用TSC组合梁降低层高并确保设备空间。",
-        "ja": "TSC合成梁の適用で階高を抑えつつ設備スペースを確保しました。"
-      },
-      "description": {
-        "ko": "여기에 프로젝트 상세 설명을 작성합니다.\n\n이 문장은 더미 텍스트입니다.",
-        "en": "Write the detailed project description here.\n\nThis is dummy text.",
-        "zh": "在此撰写项目详细说明。\n\n此段为示例文字。",
-        "ja": "ここにプロジェクトの詳細説明を記入します。\n\nこの文章はダミーテキストです。"
-      }
+    "unit": {
+      "ko": "건",
+      "en": "",
+      "zh": "件",
+      "ja": "件"
     },
-    {
-      "id": "prj-logistics",
-      "image": "/uploads/images/project-04.jpg",
-      "methods": ["CRC"],
-      "name": { "ko": "[더미] 대형 물류센터", "en": "[dummy] Large-scale Logistics Centre", "zh": "[样例] 大型物流中心", "ja": "[ダミー] 大型物流センター" },
-      "client": { "ko": "OO로지스", "en": "OO Logis", "zh": "OO物流", "ja": "OOロジス" },
-      "location": { "ko": "충청북도", "en": "Chungcheongbuk-do, Korea", "zh": "忠清北道", "ja": "忠清北道" },
-      "year": "2024",
-      "scale": { "ko": "지상 5층, 연면적 120,000㎡", "en": "5F, GFA 120,000㎡", "zh": "地上5层，建筑面积120,000㎡", "ja": "地上5階、延床面積120,000㎡" },
-      "summary": {
-        "ko": "장스팬 구조와 고강도 기둥으로 적재 효율을 극대화했습니다.",
-        "en": "Long-span framing with high-strength columns maximised storage efficiency.",
-        "zh": "以大跨结构与高强度柱实现装载效率最大化。",
-        "ja": "ロングスパン構造と高強度柱により積載効率を最大化しました。"
-      },
-      "description": {
-        "ko": "여기에 프로젝트 상세 설명을 작성합니다.\n\n이 문장은 더미 텍스트입니다.",
-        "en": "Write the detailed project description here.\n\nThis is dummy text.",
-        "zh": "在此撰写项目详细说明。\n\n此段为示例文字。",
-        "ja": "ここにプロジェクトの詳細説明を記入します。\n\nこの文章はダミーテキストです。"
-      }
+    "regionLabel": {
+      "ko": "수행 지역",
+      "en": "Regions covered",
+      "zh": "覆盖地区",
+      "ja": "実施地域"
     },
-    {
-      "id": "prj-hospital",
-      "image": "/uploads/images/project-05.jpg",
-      "methods": ["PSRC"],
-      "name": { "ko": "[더미] 대학병원 신관", "en": "[dummy] University Hospital New Wing", "zh": "[样例] 大学医院新馆", "ja": "[ダミー] 大学病院 新館" },
-      "client": { "ko": "OO대학교", "en": "OO University", "zh": "OO大学", "ja": "OO大学" },
-      "location": { "ko": "서울", "en": "Seoul, Korea", "zh": "首尔", "ja": "ソウル" },
-      "year": "2022",
-      "scale": { "ko": "지하 5층 / 지상 15층", "en": "B5 / 15F", "zh": "地下5层／地上15层", "ja": "地下5階／地上15階" },
-      "summary": {
-        "ko": "무진동·저소음 시공 조건에서 선조립 기둥으로 민원을 최소화했습니다.",
-        "en": "Prefabricated columns minimised disturbance under strict noise and vibration limits.",
-        "zh": "在无振动、低噪声施工条件下，采用预组装柱最大限度减少投诉。",
-        "ja": "無振動・低騒音の施工条件下、先組立柱により苦情を最小化しました。"
-      },
-      "description": {
-        "ko": "여기에 프로젝트 상세 설명을 작성합니다.\n\n이 문장은 더미 텍스트입니다.",
-        "en": "Write the detailed project description here.\n\nThis is dummy text.",
-        "zh": "在此撰写项目详细说明。\n\n此段为示例文字。",
-        "ja": "ここにプロジェクトの詳細説明を記入します。\n\nこの文章はダミーテキストです。"
-      }
-    },
-    {
-      "id": "prj-factory",
-      "image": "/uploads/images/project-06.jpg",
-      "methods": ["OSC / DfMA"],
-      "name": { "ko": "[더미] 반도체 공장 지원동", "en": "[dummy] Semiconductor Fab Support Building", "zh": "[样例] 半导体工厂配套楼", "ja": "[ダミー] 半導体工場 支援棟" },
-      "client": { "ko": "OO전자", "en": "OO Electronics", "zh": "OO电子", "ja": "OO電子" },
-      "location": { "ko": "경기도", "en": "Gyeonggi-do, Korea", "zh": "京畿道", "ja": "京畿道" },
-      "year": "2025",
-      "scale": { "ko": "지상 6층, 연면적 55,000㎡", "en": "6F, GFA 55,000㎡", "zh": "地上6层，建筑面积55,000㎡", "ja": "地上6階、延床面積55,000㎡" },
-      "summary": {
-        "ko": "BIM 기반 DfMA 설계로 현장 간섭을 사전 제거했습니다.",
-        "en": "BIM-driven DfMA design eliminated on-site clashes in advance.",
-        "zh": "基于BIM的DfMA设计事先消除现场碰撞。",
-        "ja": "BIMベースのDfMA設計により現場干渉を事前に解消しました。"
-      },
-      "description": {
-        "ko": "여기에 프로젝트 상세 설명을 작성합니다.\n\n이 문장은 더미 텍스트입니다.",
-        "en": "Write the detailed project description here.\n\nThis is dummy text.",
-        "zh": "在此撰写项目详细说明。\n\n此段为示例文字。",
-        "ja": "ここにプロジェクトの詳細説明を記入します。\n\nこの文章はダミーテキストです。"
-      }
+    "regionUnit": {
+      "ko": "곳",
+      "en": "",
+      "zh": "处",
+      "ja": "カ所"
     }
-  ]
+  },
+  "_주석": [
+    "실적 대부분은 uploads/data/projects.xlsx 의 A열(주소)에서 자동으로 읽어 옵니다.",
+    "아래 addresses 는 엑셀에 아직 반영되지 않은 신규 건을 Pages CMS 에서",
+    "한 건씩 덧붙이는 자리입니다. 엑셀을 새로 올리면 그쪽이 우선합니다."
+  ],
+  "addresses": []
 }

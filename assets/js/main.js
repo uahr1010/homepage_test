@@ -117,6 +117,55 @@ window.SEN = window.SEN || {};
     }, true);
   }
 
+  /* ---------- 실적 지구본 ----------
+     주소 → 좌표 변환과 집계는 projects.js, 그리기는 globe.js 가 맡습니다.
+     여기서는 둘을 잇고, 지구본이 못 뜨더라도 남아야 할 숫자·목록을 그립니다. */
+  function initGlobe(data) {
+    var stage = document.querySelector('[data-globe]');
+    if (!stage || !SEN.projects) return;
+
+    var t = SEN.i18n.t;
+    var ui = SEN.util.pick(data, 'projects.ui') || {};
+    var elStats = document.querySelector('[data-globe-stats]');
+    var elList = document.querySelector('[data-region-list]');
+    var elHint = document.querySelector('[data-globe-hint]');
+
+    SEN.projects.load(SEN.util.pick(data, 'projects.addresses') || []).then(function (res) {
+      SEN.projectData = res;
+
+      if (elHint) elHint.textContent = t(ui.dragHint) || '';
+
+      if (elStats) {
+        elStats.innerHTML = [
+          [t(ui.totalLabel) || '누적 실적', res.placed.toLocaleString() + (t(ui.unit) || '건')],
+          [t(ui.regionLabel) || '수행 지역', res.regions.length + (t(ui.regionUnit) || '곳')]
+        ].map(function (r) {
+          return '<div><dt>' + SEN.util.esc(r[0]) + '</dt><dd>' + SEN.util.esc(r[1]) + '</dd></div>';
+        }).join('');
+      }
+
+      if (elList) {
+        elList.innerHTML = res.regions.slice(0, 12).map(function (r) {
+          return '<li><span class="regions__name">' + SEN.util.esc(r.name) + '</span>' +
+                 '<span class="regions__bar"><i style="width:' +
+                 Math.max(4, Math.round(r.n / res.regions[0].n * 100)) + '%"></i></span>' +
+                 '<span class="regions__n">' + r.n + '</span></li>';
+        }).join('');
+      }
+
+      if (SEN.reveal) SEN.reveal.refresh();
+
+      return SEN.globe.init(res, {
+        wrap: stage,
+        pills: stage.querySelector('[data-globe-pills]'),
+        tip: stage.querySelector('[data-globe-tip]')
+      });
+    }).catch(function (err) {
+      console.warn('[SEN] 실적 데이터를 불러오지 못했습니다:', err && err.message);
+      if (elHint) elHint.textContent = '';
+    });
+  }
+
   /* ---------- 부팅 ---------- */
   function boot() {
     SEN.i18n.init();
@@ -130,6 +179,7 @@ window.SEN = window.SEN || {};
 
       SEN.nav.init();
       SEN.reveal.init();
+      initGlobe(data);
 
       // 언어 변경 시 전체 다시 렌더
       SEN.i18n.onChange(function () {

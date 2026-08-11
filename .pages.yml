@@ -1,9 +1,18 @@
 # ============================================================================
 #  Pages CMS 설정 파일  (https://pagescms.org)
 #  이 파일이 저장소 루트에 있어야 Pages CMS가 편집 화면을 만들어 줍니다.
-#  - media   : 이미지/PDF 업로드 위치
-#  - content : 편집할 JSON 파일과 각 항목의 입력 폼 정의
-#  다국어 필드는 { ko, en, zh, ja } 4칸짜리 object 로 정의되어 있습니다.
+#
+#  ── 편집 가능한 것은 딱 세 가지입니다 ──
+#    ① 프로젝트  : 새 프로젝트의 주소만 입력 (지구본에 자동으로 찍힘)
+#    ② 뉴스      : 새 뉴스 추가
+#    ③ 채용      : 새 채용공고 추가
+#
+#  회사 소개·연혁·주요공법·CONTACT·섹션 문구 등 나머지는 전부 고정값입니다.
+#  바꿔야 할 일이 생기면 content/*.json 파일을 직접 수정하세요.
+#  (예전에는 이것들도 CMS에 떠 있었지만, 실수로 건드리기 쉬워 걷어냈습니다)
+#
+#  다국어 필드는 { ko, en, zh, ja } 4칸입니다. 한국어만 채워도 되고,
+#  비워 둔 언어는 자동으로 한국어가 표시됩니다.
 # ============================================================================
 
 media:
@@ -12,607 +21,87 @@ media:
     input: uploads/images
     output: /uploads/images
     extensions: [jpg, jpeg, png, webp, gif, svg]
-  - name: docs
-    label: PDF 자료
-    input: uploads/docs
-    output: /uploads/docs
-    extensions: [pdf]
+  - name: data
+    label: 실적 엑셀
+    input: uploads/data
+    output: /uploads/data
+    extensions: [xlsx]
 
 content:
 
   # --------------------------------------------------------------------------
-  # 1) 사이트 공통 — 회사명, 히어로, 메뉴 라벨, 버튼 문구, 푸터
+  # ① 프로젝트 — 주소만 넣으면 지구본에 점이 찍힙니다.
+  #
+  #    실적 대부분은 uploads/data/projects.xlsx (A열 = 주소) 에서 자동으로
+  #    읽어 옵니다. 여기 목록은 엑셀에 아직 반영되지 않은 신규 건을
+  #    한 건씩 덧붙이는 용도입니다.
   # --------------------------------------------------------------------------
-  - name: site
-    label: ① 사이트 공통
+  - name: projects
+    label: ① 프로젝트 (주소 추가)
     type: file
-    path: content/site.json
+    path: content/projects.json
     format: json
     fields:
-      - name: company
-        label: 회사 정보
+      - name: addresses
+        label: 신규 프로젝트 주소
         type: object
-        fields:
-          - { name: shortName, label: 로고 약칭, type: string }
-          - name: name
-            label: 회사명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-
-      - name: seo
-        label: 검색엔진 / 공유 정보
-        type: object
-        fields:
-          - name: title
-            label: 페이지 제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: description
-            label: 페이지 설명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-
-      - name: hero
-        label: 첫 화면 (Hero)
-        type: object
-        fields:
-          - name: eyebrow
-            label: 작은 라벨
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: title
-            label: 큰 제목 (줄바꿈 가능)
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-          - name: subtitle
-            label: 부제
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-          - name: stats
-            label: 숫자 지표
-            type: object
-            list: true
-            fields:
-              - { name: value, label: 숫자, type: string }
-              - name: label
-                label: 설명
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: string }
-                  - { name: en, label: English, type: string }
-                  - { name: zh, label: 中文,    type: string }
-                  - { name: ja, label: 日本語,  type: string }
-
-      - name: nav
-        label: 메뉴 이름
-        type: object
-        fields:
-          - name: about
-            label: 메뉴1 · 회사소개
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: news
-            label: 메뉴2 · 뉴스
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: projects
-            label: 메뉴3 · 프로젝트
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: careers
-            label: 메뉴4 · 채용
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: sub
-            label: 회사소개 하위 메뉴
-            type: object
-            fields:
-              - name: ceo
-                label: CEO 인사말
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: string }
-                  - { name: en, label: English, type: string }
-                  - { name: zh, label: 中文,    type: string }
-                  - { name: ja, label: 日本語,  type: string }
-              - name: history
-                label: 회사연혁
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: string }
-                  - { name: en, label: English, type: string }
-                  - { name: zh, label: 中文,    type: string }
-                  - { name: ja, label: 日本語,  type: string }
-              - name: methods
-                label: 주요공법
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: string }
-                  - { name: en, label: English, type: string }
-                  - { name: zh, label: 中文,    type: string }
-                  - { name: ja, label: 日本語,  type: string }
-              - name: contact
-                label: CONTACT
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: string }
-                  - { name: en, label: English, type: string }
-                  - { name: zh, label: 中文,    type: string }
-                  - { name: ja, label: 日本語,  type: string }
-
-      - name: ui
-        label: 버튼 / 안내 문구
-        description: 사이트 전체에서 반복 사용되는 짧은 문구입니다. 자주 바꿀 일은 없습니다.
-        type: object
-        fields:
-          - name: downloadPdf
-            label: PDF 다운로드 버튼
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: pdfSoon
-            label: PDF 없음 표시
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: readMore
-            label: 자세히 보기
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: viewDetail
-            label: 상세 보기
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: loadMore
-            label: 더 보기
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: all
-            label: 전체 (필터)
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: empty
-            label: 내용 없음 안내
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: apply
-            label: 지원하기 버튼
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: sendMail
-            label: 메일 안내 문구
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: mailSubject
-            label: 문의 메일 기본 제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-
-      - name: footer
-        label: 푸터
-        type: object
+        list: true
+        description: >
+          "서울시 강남구 테헤란로 123" 처럼 시/도 + 시/군/구가 들어가게 적어 주세요.
+          시군구까지 인식되면 정확한 위치에, 시도만 인식되면 그 지역 중심에 찍힙니다.
         fields:
           - name: address
             label: 주소
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: tel
-            label: 전화 / 팩스
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: copyright
-            label: 저작권 표기
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-
-  # --------------------------------------------------------------------------
-  # 2) 회사소개 — CEO 인사말 / 회사연혁 / 주요공법(PDF) / CONTACT
-  # --------------------------------------------------------------------------
-  - name: about
-    label: ② 회사소개
-    type: file
-    path: content/about.json
-    format: json
-    fields:
-      - name: section
-        label: 섹션 머리말
-        type: object
-        fields:
-          - name: eyebrow
-            label: 작은 라벨
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: title
-            label: 제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-          - name: lead
-            label: 소개 문단
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-
-      - name: ceo
-        label: CEO 인사말
-        type: object
-        fields:
-          - name: heading
-            label: 소제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - { name: photo, label: 사진, type: image, options: { media: images } }
-          - name: quote
-            label: 인용문
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-          - name: body
-            label: 본문 (빈 줄 하나로 문단 구분)
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-          - name: role
-            label: 직함
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: name
-            label: 성명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: careerLabel
-            label: 약력 접기 제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: career
-            label: 약력 항목
-            type: object
-            list: true
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-
-      - name: history
-        label: 회사연혁
-        type: object
-        fields:
-          - name: heading
-            label: 소제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: lead
-            label: 설명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-          - name: items
-            label: 연혁 항목
-            type: object
-            list: true
-            fields:
-              - { name: year, label: 연도, type: string }
-              - name: title
-                label: 제목
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: string }
-                  - { name: en, label: English, type: string }
-                  - { name: zh, label: 中文,    type: string }
-                  - { name: ja, label: 日本語,  type: string }
-              - name: desc
-                label: 설명
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: text }
-                  - { name: en, label: English, type: text }
-                  - { name: zh, label: 中文,    type: text }
-                  - { name: ja, label: 日本語,  type: text }
-
-      - name: methods
-        label: 주요공법
-        type: object
-        fields:
-          - name: heading
-            label: 소제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: lead
-            label: 설명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-          - name: items
-            label: 공법 목록
-            type: object
-            list: true
-            fields:
-              - { name: code, label: 공법 약칭 (PSRC 등), type: string }
-              - name: name
-                label: 공법명
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: string }
-                  - { name: en, label: English, type: string }
-                  - { name: zh, label: 中文,    type: string }
-                  - { name: ja, label: 日本語,  type: string }
-              - name: summary
-                label: 한 줄 요약
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: text }
-                  - { name: en, label: English, type: text }
-                  - { name: zh, label: 中文,    type: text }
-                  - { name: ja, label: 日本語,  type: text }
-              - name: points
-                label: 특징 (여러 개)
-                type: object
-                list: true
-                fields:
-                  - { name: ko, label: 한국어, type: string }
-                  - { name: en, label: English, type: string }
-                  - { name: zh, label: 中文,    type: string }
-                  - { name: ja, label: 日本語,  type: string }
-              - { name: image, label: 대표 이미지, type: image, options: { media: images } }
-              - { name: pdf,   label: 기술자료 PDF, type: file,  options: { media: docs } }
-
-      - name: contact
-        label: CONTACT
-        type: object
-        fields:
-          - name: heading
-            label: 소제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: lead
-            label: 설명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-          - name: generalLabel
-            label: 대표 메일 라벨
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: generalEmail
-            label: 대표 문의 이메일
             type: string
-            pattern: { regex: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", message: "올바른 이메일 형식이 아닙니다." }
-          - name: offices
-            label: 사업장 목록
-            type: object
-            list: true
-            fields:
-              - name: tag
-                label: 구분 (본사/공장 등)
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: string }
-                  - { name: en, label: English, type: string }
-                  - { name: zh, label: 中文,    type: string }
-                  - { name: ja, label: 日本語,  type: string }
-              - name: name
-                label: 사업장명
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: string }
-                  - { name: en, label: English, type: string }
-                  - { name: zh, label: 中文,    type: string }
-                  - { name: ja, label: 日本語,  type: string }
-              - name: address
-                label: 주소
-                type: object
-                fields:
-                  - { name: ko, label: 한국어, type: text }
-                  - { name: en, label: English, type: text }
-                  - { name: zh, label: 中文,    type: text }
-                  - { name: ja, label: 日本語,  type: text }
-              - { name: tel,   label: 전화, type: string }
-              - { name: fax,   label: 팩스, type: string }
-              - { name: email, label: 이메일 (선택), type: string }
+            required: true
+          - name: team
+            label: 담당 (선택)
+            type: string
+            description: 구조1, 진단 등. 비워도 됩니다.
 
   # --------------------------------------------------------------------------
-  # 3) 뉴스
+  # ② 뉴스
   # --------------------------------------------------------------------------
   - name: news
-    label: ③ 뉴스
+    label: ② 뉴스
     type: file
     path: content/news.json
     format: json
     fields:
-      - name: section
-        label: 섹션 머리말
-        type: object
-        fields:
-          - name: eyebrow
-            label: 작은 라벨
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: title
-            label: 제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: lead
-            label: 설명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-
       - name: items
         label: 뉴스 목록
         type: object
-        list: { min: 0 }
+        list: true
+        description: 날짜 기준 최신순으로 자동 정렬됩니다.
         fields:
-          - { name: id,    label: 고유 ID (영문·숫자), type: string }
-          - { name: date,  label: 날짜, type: date, options: { format: "yyyy-MM-dd" } }
+          - name: id
+            label: 고유 ID
+            type: string
+            required: true
+            description: 영문·숫자·하이픈 (예 news-2026-09-award). 중복만 아니면 됩니다.
+          - name: date
+            label: 날짜
+            type: date
+            required: true
           - name: category
-            label: 분류 (필터 버튼이 됩니다)
+            label: 분류
             type: object
+            description: >
+              기존 분류(언론보도 / 행사 / 논문 / 기술자료)와 똑같이 적어야
+              같은 필터 버튼으로 묶입니다.
             fields:
               - { name: ko, label: 한국어, type: string }
               - { name: en, label: English, type: string }
               - { name: zh, label: 中文,    type: string }
               - { name: ja, label: 日本語,  type: string }
-          - { name: image, label: 썸네일, type: image, options: { media: images } }
-          - { name: link,  label: 원문 링크 (선택), type: string }
+          - name: image
+            label: 썸네일
+            type: image
+            description: 비워 두면 블루 그라디언트가 표시됩니다.
+          - name: link
+            label: 원문 링크
+            type: string
+            description: 입력하면 카드 전체가 새 탭 링크가 됩니다.
           - name: title
             label: 제목
             type: object
@@ -631,270 +120,37 @@ content:
               - { name: ja, label: 日本語,  type: text }
 
   # --------------------------------------------------------------------------
-  # 4) 프로젝트
-  # --------------------------------------------------------------------------
-  - name: projects
-    label: ④ 프로젝트
-    type: file
-    path: content/projects.json
-    format: json
-    fields:
-      - name: section
-        label: 섹션 머리말
-        type: object
-        fields:
-          - name: eyebrow
-            label: 작은 라벨
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: title
-            label: 제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: lead
-            label: 설명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-
-      - name: labels
-        label: 상세 항목 이름 (발주처/위치/준공/규모)
-        type: object
-        fields:
-          - name: client
-            label: 발주처
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: location
-            label: 위치
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: year
-            label: 준공
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: scale
-            label: 규모
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-
-      - name: items
-        label: 프로젝트 목록
-        type: object
-        list: { min: 0 }
-        fields:
-          - { name: id,    label: 고유 ID (영문·숫자), type: string }
-          - { name: image, label: 대표 이미지, type: image, options: { media: images } }
-          - { name: methods, label: 적용 공법 (PSRC 등 · 필터 버튼이 됩니다), type: string, list: true }
-          - name: name
-            label: 프로젝트명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: client
-            label: 발주처
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: location
-            label: 위치
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - { name: year, label: 준공 연도, type: string }
-          - name: scale
-            label: 규모
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: summary
-            label: 카드 요약
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-          - name: description
-            label: 상세 설명 (빈 줄 하나로 문단 구분)
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-
-  # --------------------------------------------------------------------------
-  # 5) 채용
+  # ③ 채용공고
   # --------------------------------------------------------------------------
   - name: careers
-    label: ⑤ 채용
+    label: ③ 채용공고
     type: file
     path: content/careers.json
     format: json
     fields:
-      - name: section
-        label: 섹션 머리말
-        type: object
-        fields:
-          - name: eyebrow
-            label: 작은 라벨
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: title
-            label: 제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: lead
-            label: 설명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-
       - name: applyEmail
-        label: 지원 접수 이메일 (기본값)
-        description: 각 공고에서 따로 지정하지 않으면 이 주소로 지원 메일이 발송됩니다.
+        label: 지원 접수 이메일 (전체 기본값)
         type: string
-        pattern: { regex: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", message: "올바른 이메일 형식이 아닙니다." }
-      - name: applyMailSubject
-        label: 지원 메일 제목 ({job} 자리에 공고명이 들어갑니다)
-        type: object
-        fields:
-          - { name: ko, label: 한국어, type: string }
-          - { name: en, label: English, type: string }
-          - { name: zh, label: 中文,    type: string }
-          - { name: ja, label: 日本語,  type: string }
-      - name: applyMailBody
-        label: 지원 메일 기본 본문
-        type: object
-        fields:
-          - { name: ko, label: 한국어, type: text }
-          - { name: en, label: English, type: text }
-          - { name: zh, label: 中文,    type: text }
-          - { name: ja, label: 日本語,  type: text }
-
-      - name: requirementsLabel
-        label: '"자격 요건" 라벨'
-        type: object
-        fields:
-          - { name: ko, label: 한국어, type: string }
-          - { name: en, label: English, type: string }
-          - { name: zh, label: 中文,    type: string }
-          - { name: ja, label: 日本語,  type: string }
-      - name: preferredLabel
-        label: '"우대 사항" 라벨'
-        type: object
-        fields:
-          - { name: ko, label: 한국어, type: string }
-          - { name: en, label: English, type: string }
-          - { name: zh, label: 中文,    type: string }
-          - { name: ja, label: 日本語,  type: string }
-      - name: deadlineLabel
-        label: '"마감" 라벨'
-        type: object
-        fields:
-          - { name: ko, label: 한국어, type: string }
-          - { name: en, label: English, type: string }
-          - { name: zh, label: 中文,    type: string }
-          - { name: ja, label: 日本語,  type: string }
-      - name: jobsHeading
-        label: 공고 목록 소제목
-        type: object
-        fields:
-          - { name: ko, label: 한국어, type: string }
-          - { name: en, label: English, type: string }
-          - { name: zh, label: 中文,    type: string }
-          - { name: ja, label: 日本語,  type: string }
-      - name: processHeading
-        label: 전형 절차 소제목
-        type: object
-        fields:
-          - { name: ko, label: 한국어, type: string }
-          - { name: en, label: English, type: string }
-          - { name: zh, label: 中文,    type: string }
-          - { name: ja, label: 日本語,  type: string }
-
-      - name: values
-        label: 인재상
-        type: object
-        list: true
-        fields:
-          - name: title
-            label: 제목
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: desc
-            label: 설명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: text }
-              - { name: en, label: English, type: text }
-              - { name: zh, label: 中文,    type: text }
-              - { name: ja, label: 日本語,  type: text }
-
       - name: jobs
         label: 채용공고
         type: object
-        list: { min: 0 }
+        list: true
         fields:
-          - { name: id,    label: 고유 ID (영문·숫자), type: string }
-          - { name: email, label: 이 공고 전용 접수 메일 (비우면 기본값 사용), type: string }
+          - name: id
+            label: 고유 ID
+            type: string
+            required: true
+            description: 영문·숫자·하이픈 (예 job-2026-structure).
+          - name: email
+            label: 이 공고 전용 접수 메일
+            type: string
+            description: 비워 두면 위의 기본 접수 이메일을 씁니다.
+          - name: deadline
+            label: 마감일
+            type: date
+            description: 비워 두면 마감 배지가 표시되지 않습니다 (상시채용).
           - name: title
-            label: 공고명 / 직무
+            label: 공고명
             type: object
             fields:
               - { name: ko, label: 한국어, type: string }
@@ -910,7 +166,7 @@ content:
               - { name: zh, label: 中文,    type: string }
               - { name: ja, label: 日本語,  type: string }
           - name: type
-            label: 고용 형태
+            label: 고용형태
             type: object
             fields:
               - { name: ko, label: 한국어, type: string }
@@ -925,7 +181,6 @@ content:
               - { name: en, label: English, type: string }
               - { name: zh, label: 中文,    type: string }
               - { name: ja, label: 日本語,  type: string }
-          - { name: deadline, label: 마감일 (비우면 상시채용), type: date, options: { format: "yyyy-MM-dd" } }
           - name: description
             label: 담당 업무
             type: object
@@ -947,28 +202,6 @@ content:
             label: 우대 사항
             type: object
             list: true
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-
-      - name: process
-        label: 전형 절차
-        type: object
-        list: true
-        fields:
-          - name: title
-            label: 단계명
-            type: object
-            fields:
-              - { name: ko, label: 한국어, type: string }
-              - { name: en, label: English, type: string }
-              - { name: zh, label: 中文,    type: string }
-              - { name: ja, label: 日本語,  type: string }
-          - name: desc
-            label: 설명
-            type: object
             fields:
               - { name: ko, label: 한국어, type: string }
               - { name: en, label: English, type: string }

@@ -284,32 +284,80 @@
 .process__title { font-size: .98rem; margin-bottom: 4px; }
 .process__desc { font-size: var(--fs-small); color: var(--c-muted); }
 
-/* ---------- 모달 ---------- */
-.modal { position: fixed; inset: 0; z-index: 130; display: grid; place-items: center; padding: var(--sp-3); }
-.modal__backdrop { position: absolute; inset: 0; background: rgba(10, 37, 64, .62); backdrop-filter: blur(4px); }
-.modal__panel {
-  position: relative; width: min(880px, 100%); max-height: 88vh; overflow-y: auto;
-  background: var(--c-white); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
-  animation: modalIn .3s var(--ease);
+/* ---------- 실적 지구본 ---------- */
+.globe { margin-bottom: var(--sp-5); }
+.globe__stage {
+  position: relative; width: 100%; aspect-ratio: 1 / 1;
+  max-width: 660px; margin: 0 auto;
+  cursor: grab; touch-action: pan-y;
 }
-@keyframes modalIn { from { opacity: 0; transform: translateY(18px) scale(.985); } }
-.modal__close {
-  position: absolute; top: 12px; right: 14px; z-index: 2;
-  width: 38px; height: 38px; border-radius: 50%; font-size: 1.5rem; line-height: 1;
-  background: rgba(255, 255, 255, .9); box-shadow: var(--shadow-sm);
+.globe__stage.is-dragging { cursor: grabbing; }
+.globe__stage canvas { display: block; width: 100% !important; height: 100% !important; }
+/* WebGL 을 못 쓰는 환경 — 지구본 자리를 접고 아래 숫자·목록만 남깁니다 */
+.globe__stage.is-unavailable { display: none; }
+.globe__stage.is-unavailable ~ .globe__hint { display: none; }
+
+.globe__pills { position: absolute; inset: 0; pointer-events: none; }
+.gpill {
+  position: absolute; top: 0; left: 0; white-space: nowrap;
+  padding: 5px 11px; border-radius: 999px;
+  background: rgba(255, 255, 255, .94); border: 1px solid var(--c-line);
+  box-shadow: var(--shadow-sm);
+  font-size: var(--fs-xs); font-weight: 700; color: var(--c-navy);
+  transition: opacity .25s var(--ease);
 }
-.modal__hero { aspect-ratio: 16 / 9; overflow: hidden; background: var(--ph); }
-.modal__hero img { width: 100%; height: 100%; object-fit: cover; }
-.modal__content { padding: var(--sp-4); }
-.modal__title { font-size: var(--fs-h3); margin-bottom: var(--sp-2); }
-.modal__specs {
-  display: grid; gap: 10px var(--sp-3); margin: var(--sp-3) 0;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+.gpill small { font-weight: 600; color: var(--c-blue); margin-left: 4px; }
+
+.globe__tip {
+  position: absolute; z-index: 3; pointer-events: none;
+  transform: translate(14px, -50%);
+  padding: 7px 12px; border-radius: var(--radius);
+  background: var(--c-navy); color: var(--c-white);
+  font-size: var(--fs-xs); line-height: 1.5; box-shadow: var(--shadow);
+  display: grid;
+}
+.globe__tip strong { font-size: .82rem; }
+.globe__tip span { color: var(--c-blue-soft); }
+
+.globe__hint {
+  text-align: center; margin-top: var(--sp-2);
+  font-size: var(--fs-xs); color: var(--c-muted); letter-spacing: .02em;
+}
+
+/* ---------- 실적 요약 숫자 ---------- */
+.globe__stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--sp-3); margin-bottom: var(--sp-5);
   border-top: 1px solid var(--c-line); border-bottom: 1px solid var(--c-line);
   padding: var(--sp-3) 0;
 }
-.modal__specs dt { font-size: var(--fs-xs); letter-spacing: .1em; text-transform: uppercase; color: var(--c-muted); }
-.modal__specs dd { font-size: .95rem; font-weight: 600; margin: 2px 0 0; }
+.globe__stats dt {
+  font-size: var(--fs-xs); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--c-muted); margin-bottom: 4px;
+}
+.globe__stats dd {
+  font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 600; line-height: 1; color: var(--c-navy);
+}
+
+/* ---------- 지역별 실적 순위 ---------- */
+.regions { display: grid; gap: 10px; }
+.regions li {
+  display: grid; grid-template-columns: 8.5rem 1fr 3rem; gap: var(--sp-2);
+  align-items: center; font-size: var(--fs-small);
+}
+.regions__name { font-weight: 600; color: var(--c-ink); }
+.regions__bar { height: 8px; border-radius: 999px; background: var(--c-tint); overflow: hidden; }
+.regions__bar i {
+  display: block; height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, var(--c-blue-mid), var(--c-blue));
+}
+.regions__n { text-align: right; font-weight: 700; color: var(--c-blue); }
+
+@media (max-width: 560px) {
+  .regions li { grid-template-columns: 6.5rem 1fr 2.6rem; gap: 10px; font-size: var(--fs-xs); }
+  .gpill { font-size: 10px; padding: 3px 8px; }
+}
 
 /* ---------- 로딩 / 빈 상태 ---------- */
 .state {

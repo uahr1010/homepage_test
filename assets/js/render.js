@@ -160,30 +160,6 @@ window.SEN = window.SEN || {};
       }).join('');
     },
 
-    /* 프로젝트 카드 (클릭 시 모달) */
-    'projects.items': function (items, ctx) {
-      var detail = t(pick(ctx, 'site.ui.viewDetail')) || '상세 보기';
-      if (!items.length) return '<p class="state">' + esc(t(pick(ctx, 'site.ui.empty')) || '등록된 프로젝트가 없습니다.') + '</p>';
-
-      return items.map(function (it, i) {
-        var tags = (it.methods || []).map(function (m) { return '<span class="tag">' + esc(m) + '</span>'; }).join('');
-        return '' +
-          '<button type="button" class="card reveal" data-delay="' + (i % 4) + '" data-project="' + esc(it.id || i) + '">' +
-            '<div class="card__thumb">' + imgTag(it.image, t(it.name)) + '</div>' +
-            '<div class="card__body">' +
-              '<div class="card__meta">' +
-                (t(it.location) ? '<span>' + esc(t(it.location)) + '</span><span>·</span>' : '') +
-                '<span>' + esc(t(it.year)) + '</span>' +
-              '</div>' +
-              '<h3 class="card__title">' + esc(t(it.name)) + '</h3>' +
-              '<p class="card__excerpt">' + esc(t(it.summary)) + '</p>' +
-              (tags ? '<div class="tags">' + tags + '</div>' : '') +
-              '<span class="card__foot">' + esc(detail) + '</span>' +
-            '</div>' +
-          '</button>';
-      }).join('');
-    },
-
     /* 채용 - 인재상 */
     'careers.values': function (items) {
       return items.map(function (it, i) {
@@ -254,34 +230,6 @@ window.SEN = window.SEN || {};
     }
   };
 
-  /* ---------- 프로젝트 모달 ---------- */
-  function projectModalHTML(p, ctx) {
-    var L = (ctx.projects && ctx.projects.labels) || {};
-    var rows = [
-      [t(L.client)   || '발주처', t(p.client)],
-      [t(L.location) || '위치',   t(p.location)],
-      [t(L.year)     || '준공',   t(p.year)],
-      [t(L.scale)    || '규모',   t(p.scale)]
-    ].filter(function (r) { return r[1]; });
-
-    var specs = rows.map(function (r) {
-      return '<div><dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd></div>';
-    }).join('');
-
-    var tags = (p.methods || []).map(function (m) { return '<span class="tag">' + esc(m) + '</span>'; }).join('');
-    var body = t(p.description).split(/\n{2,}/).filter(Boolean)
-      .map(function (par) { return '<p>' + esc(par) + '</p>'; }).join('');
-
-    return '' +
-      '<div class="modal__hero">' + imgTag(p.image, t(p.name)) + '</div>' +
-      '<div class="modal__content">' +
-        '<h3 class="modal__title">' + esc(t(p.name)) + '</h3>' +
-        (tags ? '<div class="tags">' + tags + '</div>' : '') +
-        (specs ? '<dl class="modal__specs">' + specs + '</dl>' : '') +
-        '<div class="prose">' + body + '</div>' +
-      '</div>';
-  }
-
   /* ---------- 메인 렌더 ---------- */
   function render(ctx) {
     t = SEN.i18n.t; tList = SEN.i18n.tList; fmtDate = SEN.i18n.formatDate;
@@ -325,17 +273,15 @@ window.SEN = window.SEN || {};
 
       // 뉴스/프로젝트는 필터 + 더보기 상태를 적용
       if (key === 'news.items')     items = SEN.state.applyList('news', items);
-      if (key === 'projects.items') items = SEN.state.applyList('projects', items);
 
       host.innerHTML = RENDERERS[key](items, ctx);
     });
 
     // 6) 뉴스/프로젝트 필터 칩
     buildChips(ctx, 'news', '[data-newsfilter]', function (it) { return t(it.category); });
-    buildChips(ctx, 'projects', '[data-projectfilter]', function (it) { return (it.methods || [])[0]; });
 
     // 7) 더보기 버튼 표시 여부
-    ['news', 'projects'].forEach(function (kind) {
+    ['news'].forEach(function (kind) {
       var btn = document.querySelector('[data-more="' + kind + '"]');
       if (!btn) return;
       btn.parentElement.hidden = !SEN.state.hasMore(kind, pick(ctx, kind + '.items') || []);
@@ -365,5 +311,5 @@ window.SEN = window.SEN || {};
   }
 
   SEN.render = render;
-  SEN.util = { pick: pick, esc: esc, asset: asset, mailto: mailto, projectModalHTML: projectModalHTML };
+  SEN.util = { pick: pick, esc: esc, asset: asset, mailto: mailto };
 })(window.SEN);
