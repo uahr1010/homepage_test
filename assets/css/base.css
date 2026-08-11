@@ -15,13 +15,15 @@
   --c-tint-2:    #DCEAFA;
 
   --c-white:     #FFFFFF;
-  --c-ink:       #12233A;   /* 본문 텍스트 */
-  --c-muted:     #5B6B7F;   /* 보조 텍스트 */
-  --c-line:      #DCE5EF;   /* 구분선 */
-  --c-line-soft: #EDF2F8;
+  --c-ink:       #0E1E33;   /* 본문 텍스트 */
+  --c-muted:     #47586C;   /* 보조 텍스트 (흰 배경 대비 7.4:1) */
+  --c-line:      #C9D6E6;   /* 구분선 */
+  --c-line-soft: #E2EAF3;
 
   /* ---- 폰트 ---- */
-  --font-sans: "Pretendard", "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+  /* "Pretendard Variable" 이 앞 — index.html 에서 불러오는 웹폰트 이름입니다.
+     그다음 "Pretendard" 는 PC에 직접 설치된 경우를 위한 것입니다. */
+  --font-sans: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont,
                "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕",
                "Noto Sans KR", Roboto, sans-serif;
   --font-display: "Playfair Display", "Nanum Myeongjo", Georgia, "Batang", serif;
@@ -51,8 +53,13 @@
   --shadow:    0 12px 32px rgba(10, 37, 64, .10);
   --shadow-lg: 0 28px 60px rgba(10, 37, 64, .16);
 
-  /* 이미지 자리표시 배경 (사진 업로드 전에 보이는 블루 그라디언트) */
-  --ph: linear-gradient(135deg, #EFF5FD 0%, #DCEAFA 55%, #7FB2F0 100%);
+  /* 이미지 자리표시 배경.
+     사진 업로드 전에도 화면에 무게감이 생기도록 진한 남색 + 도면 느낌의
+     사선 해칭을 씁니다. 사진이 올라가면 이 배경은 가려집니다. */
+  --ph:
+    repeating-linear-gradient(135deg,
+      rgba(255,255,255,.055) 0 2px, transparent 2px 11px),
+    linear-gradient(135deg, #0E2E52 0%, #14497F 52%, #1E63B4 100%);
 
   --ease: cubic-bezier(.22, .8, .28, 1);
 }
@@ -72,13 +79,15 @@ html {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
 
+/* ⚠️ 여기에 `-webkit-font-smoothing: antialiased` 를 넣지 마세요.
+   macOS 전용 보정값이라, Windows 에서는 ClearType(서브픽셀 렌더링)이 꺼지면서
+   글자가 얇아지고 뿌옇게 보입니다. 특히 한글에서 심합니다. */
 body {
   font-family: var(--font-sans);
   font-size: var(--fs-body);
   line-height: 1.7;
   color: var(--c-ink);
   background: var(--c-white);
-  -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   word-break: keep-all;   /* 한국어 줄바꿈을 어절 단위로 */
 }

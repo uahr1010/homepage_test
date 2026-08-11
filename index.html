@@ -11,8 +11,15 @@
 <meta property="og:image" content="assets/img/og.jpg">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 
-<!-- 웹폰트: 필요 없으면 이 두 줄을 지우면 됩니다 (시스템 폰트로 자동 대체) -->
+<!-- 웹폰트: 필요 없으면 아래 블록을 통째로 지우면 됩니다 (시스템 폰트로 자동 대체)
+
+     Pretendard(본문 한글)는 base.css 의 --font-sans 에 1순위로 적혀 있지만
+     불러오지 않으면 PC에 설치된 사람에게만 적용되고, 대부분의 Windows 에서는
+     '맑은 고딕'으로 떨어져 글자가 흐릿해 보입니다. 그래서 여기서 직접 불러옵니다.
+     (dynamic-subset = 화면에 실제로 쓰인 글자만 내려받는 방식이라 가볍습니다) -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap">
 
 <link rel="stylesheet" href="assets/css/base.css">

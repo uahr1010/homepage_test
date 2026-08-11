@@ -149,7 +149,7 @@
 .mailcard:hover { background: rgba(255, 255, 255, .13); transform: translateY(-3px); }
 .mailcard__label { font-size: var(--fs-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--c-blue-soft); }
 .mailcard__value { font-family: var(--font-display); font-size: clamp(1.3rem, 3vw, 2rem); }
-.mailcard__cta { font-size: var(--fs-small); color: rgba(255, 255, 255, .6); }
+.mailcard__cta { font-size: var(--fs-small); color: rgba(255, 255, 255, .82); }
 
 .offices { display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
 .office {
@@ -161,8 +161,8 @@
   color: var(--c-blue-soft); margin-bottom: 6px;
 }
 .office__name { font-size: 1rem; margin-bottom: 8px; }
-.office__addr { font-size: var(--fs-small); color: rgba(255, 255, 255, .68); margin-bottom: 8px; }
-.office__meta { font-size: var(--fs-small); color: rgba(255, 255, 255, .8); display: grid; gap: 3px; }
+.office__addr { font-size: var(--fs-small); color: rgba(255, 255, 255, .85); margin-bottom: 8px; }
+.office__meta { font-size: var(--fs-small); color: rgba(255, 255, 255, .93); display: grid; gap: 3px; }
 .office__meta a { border-bottom: 1px solid rgba(255, 255, 255, .35); }
 .office__meta a:hover { color: var(--c-blue-soft); border-color: var(--c-blue-soft); }
 

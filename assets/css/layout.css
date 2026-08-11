@@ -46,7 +46,7 @@
 .logo__text strong { font-size: 1.15rem; font-weight: 800; letter-spacing: .04em; }
 .logo__text em {
   font-style: normal; font-size: .62rem; letter-spacing: .14em;
-  text-transform: uppercase; opacity: .7;
+  text-transform: uppercase; opacity: .85;
 }
 
 /* ---------- 네비게이션 ---------- */
@@ -159,7 +159,7 @@
 }
 .hero__bg::after {
   /* 건축 도면 느낌의 얇은 그리드 */
-  content: ""; position: absolute; inset: 0; opacity: .16;
+  content: ""; position: absolute; inset: 0; opacity: .10;
   background-image:
     linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
@@ -178,7 +178,7 @@
 }
 .hero__subtitle {
   font-size: var(--fs-lead); max-width: 52ch;
-  color: rgba(255, 255, 255, .82); margin-bottom: var(--sp-5);
+  color: rgba(255, 255, 255, .93); margin-bottom: var(--sp-5);
 }
 .hero__stats {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -189,7 +189,7 @@
   display: block; font-family: var(--font-display);
   font-size: clamp(1.9rem, 3.4vw, 2.8rem); font-weight: 600; line-height: 1;
 }
-.hero__stats span { font-size: var(--fs-small); color: rgba(255, 255, 255, .68); }
+.hero__stats span { font-size: var(--fs-small); color: rgba(255, 255, 255, .85); }
 
 .hero__scroll {
   position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%);
@@ -221,13 +221,13 @@
 .block { padding: var(--sp-6) 0; }
 .block--tint { background: var(--c-tint); }
 .block--navy { background: var(--c-navy); color: var(--c-white); }
-.block--navy .block__lead { color: rgba(255, 255, 255, .72); }
+.block--navy .block__lead { color: rgba(255, 255, 255, .88); }
 .block__title { font-size: var(--fs-h3); margin-bottom: var(--sp-2); }
 .block__lead { color: var(--c-muted); max-width: 60ch; margin-bottom: var(--sp-4); }
 
 /* ---------- 푸터 ---------- */
 .site-footer {
-  background: var(--c-navy-2); color: rgba(255, 255, 255, .72);
+  background: var(--c-navy-2); color: rgba(255, 255, 255, .88);
   padding: var(--sp-5) 0 var(--sp-4); font-size: var(--fs-small);
 }
 .footer__inner {
@@ -242,7 +242,7 @@
 .footer__copy {
   grid-column: 1 / -1; padding-top: var(--sp-3);
   border-top: 1px solid rgba(255, 255, 255, .14);
-  font-size: var(--fs-xs); opacity: .7;
+  font-size: var(--fs-xs); opacity: .85;
 }
 
 /* ---------- 반응형 ---------- */
