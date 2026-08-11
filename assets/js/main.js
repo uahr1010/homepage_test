@@ -153,8 +153,6 @@ window.SEN = window.SEN || {};
         }).join('');
       }
 
-      if (SEN.reveal) SEN.reveal.refresh();
-
       return SEN.globe.init(res, {
         wrap: stage,
         pills: stage.querySelector('[data-globe-pills]'),
@@ -177,23 +175,22 @@ window.SEN = window.SEN || {};
       SEN.render(data);
       applyMeta(data);
 
-      SEN.nav.init();
-      SEN.reveal.init();
+      SEN.controls.init();
+      SEN.atlas.init();
       initGlobe(data);
 
       // 언어 변경 시 전체 다시 렌더
       SEN.i18n.onChange(function () {
         SEN.render(SEN.data);
         applyMeta(SEN.data);
-        SEN.reveal.refresh();
       });
 
       scrollToHash();
     }).catch(function (err) {
       // 콘텐츠 없이도 네비게이션은 동작하도록
       SEN.data = {};
-      SEN.nav.init();
-      SEN.reveal.init();
+      SEN.controls.init();
+      SEN.atlas.init();
       showError(err);
     });
   }
