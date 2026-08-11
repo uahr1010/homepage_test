@@ -184,6 +184,9 @@ window.SEN = window.SEN || {};
     }
     size();
     addEventListener('resize', size);
+    /* 장면이 숨겨진 채로 초기화되면 이 시점의 폭이 0 입니다.
+       나중에 장면이 열려 크기가 잡히는 순간 다시 맞춰 줍니다. */
+    if ('ResizeObserver' in window) new ResizeObserver(size).observe(wrap);
 
     /* ---- 애니메이션 ---- */
     var qKorea = quatFor(30, 127.5);

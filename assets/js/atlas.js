@@ -3,7 +3,6 @@
 
    · 스크롤 위치를 0~1 로 환산해 장면을 교차 전환합니다.
    · 상단 메뉴 / 오른쪽 점 = 해당 장면의 스크롤 위치로 이동.
-   · 인트로 영상은 포스터를 먼저 띄우고, 여유가 있을 때만 내려받아 바꿔칩니다.
 
    장면을 추가·삭제하면 atlas.css 의 #scroll-space 높이도 같이 손봐야
    장면당 스크롤 양이 비슷하게 유지됩니다. (현재 5장면 / 700vh)
@@ -30,7 +29,6 @@ window.SEN = window.SEN || {};
     initNav();
     initLang();
     initAboutTabs();
-    initVideo();
 
     if (reduce) {                       /* 모션 최소화 — 장면을 그냥 이어 붙입니다 */
       scenes.forEach(function (s) { s.style.opacity = 1; s.hidden = false; });
@@ -104,8 +102,6 @@ window.SEN = window.SEN || {};
     });
     /* 인트로(어두운 영상) 위에서는 투명 헤더, 나머지 밝은 장면에서는 흰 헤더 */
     if (topbar) topbar.classList.toggle('is-light', !scenes[i].classList.contains('scene--dark'));
-    var v = document.getElementById('introVideo');
-    if (v) { if (i === 0) { play(v); } else { v.pause(); } }
   }
 
   function goTo(i) {
@@ -169,33 +165,6 @@ window.SEN = window.SEN || {};
         p.hidden = p.getAttribute('data-about-panel') !== name;
       });
     });
-  }
-
-  /* ---------- 인트로 영상 ----------
-     20MB짜리 5초 루프라 첫 화면을 막지 않도록 포스터를 먼저 보여 주고,
-     연결이 넉넉할 때만 뒤에서 받아 바꿔칩니다. */
-  function initVideo() {
-    var v = document.getElementById('introVideo');
-    if (!v) return;
-
-    var c = navigator.connection;
-    var stingy = c && (c.saveData || /^([23]g|slow-2g)$/.test(c.effectiveType || ''));
-    if (stingy || reduce) return;         /* 포스터만 보여 주고 끝냅니다 */
-
-    var src = v.getAttribute('data-src');
-    if (!src) return;
-    v.addEventListener('canplay', function () {
-      v.closest('.scene').classList.add('is-playing');
-      if (cur === 0) play(v);
-    }, { once: true });
-    v.src = src;
-    v.load();
-  }
-
-  function play(v) {
-    if (!v.src) return;
-    var p = v.play();
-    if (p && p.catch) p.catch(function () { /* 자동재생 차단은 조용히 넘어갑니다 */ });
   }
 
   SEN.atlas = { init: init, goTo: goTo };

@@ -72,9 +72,6 @@ try { document.documentElement.className += ' js-stage'; } catch (e) {}
   <section class="scene scene--dark" id="scene-intro" data-label="인트로">
     <div class="intro__media">
       <img class="intro__poster" src="assets/img/intro-poster.jpg" alt="" fetchpriority="high">
-      <!-- 20MB 짜리 5초 루프라 첫 화면을 막지 않도록 atlas.js 가 나중에 붙입니다 -->
-      <video id="introVideo" data-src="assets/video/intro.mp4"
-             muted playsinline webkit-playsinline loop preload="none"></video>
       <div class="intro__vignette"></div>
     </div>
     <div class="intro__hud">

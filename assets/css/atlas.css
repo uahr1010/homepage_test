@@ -59,13 +59,22 @@ body {
 .js-stage .scene {
   position: absolute; inset: 0; min-height: 0;
   will-change: transform, opacity;
-  overflow-y: auto; overscroll-behavior: contain;
+  /* ⚠️ 여기에 overflow-y:auto / overscroll-behavior:contain 을 넣지 마세요.
+     장면이 화면 전체를 덮고 있어서, 그러면 휠 이벤트를 장면이 먹어 버리고
+     페이지로 넘기지 않아 스크롤이 통째로 멈춥니다.
+     장면 안에서 넘치는 내용은 .scene__scroll 이 따로 처리합니다. */
+  overflow: hidden;
 }
 .scene__inner {
   width: min(1180px, 92vw);
   margin: 0 auto;
-  padding: clamp(88px, 12vh, 132px) 0 clamp(48px, 8vh, 80px);
+  padding: clamp(72px, 9vh, 104px) 0 clamp(24px, 4vh, 48px);
 }
+/* 무대 방식에서는 장면이 딱 한 화면입니다.
+   그래도 내용이 넘치면 여기서 스크롤됩니다 — 끝에 닿으면 페이지 스크롤로 이어집니다.
+   (overscroll-behavior 를 건드리면 그 이어짐이 끊기니 넣지 마세요) */
+.js-stage .scene__inner { max-height: 100vh; overflow-y: auto; }
+.js-stage .scene__inner::-webkit-scrollbar { width: 0; }
 
 /* 밝은 장면 (회사소개·프로젝트·뉴스·채용) */
 .scene--paper { background: var(--paper); }
@@ -74,14 +83,10 @@ body {
 /* ---------- 장면 1 : 인트로 영상 ---------- */
 #scene-intro { padding: 0; place-items: stretch; overflow: hidden; }
 #scene-intro .intro__media { position: absolute; inset: 0; }
-#scene-intro video,
 #scene-intro .intro__poster {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover; display: block;
 }
-/* 영상이 준비되기 전까지는 포스터가 보입니다 (atlas.js 가 교체) */
-#scene-intro video { opacity: 0; transition: opacity .8s ease; }
-#scene-intro.is-playing video { opacity: 1; }
 
 .intro__vignette {
   position: absolute; inset: 0;
@@ -197,7 +202,7 @@ body {
 }
 
 /* 장면 안에서 스크롤이 필요한 긴 내용 */
-.scene__scroll { max-height: 52vh; overflow-y: auto; padding-right: 10px; }
+.scene__scroll { max-height: 40vh; overflow-y: auto; padding-right: 10px; }
 .scene__scroll::-webkit-scrollbar { width: 6px; }
 .scene__scroll::-webkit-scrollbar-thumb { background: var(--paper-2); border-radius: 999px; }
 
@@ -215,6 +220,9 @@ body {
 }
 .about-tabs button.is-on { background: var(--ink); border-color: var(--ink); color: #fff; }
 .about-panel[hidden] { display: none; }
+
+/* 지구본은 화면 높이에 맞춰 줄어듭니다 (세로가 짧은 화면에서 잘리지 않도록) */
+.js-stage .globe__stage { max-width: min(660px, 46vh); }
 
 @media (max-width: 900px) {
   .about-grid { grid-template-columns: 1fr; }
