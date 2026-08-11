@@ -68,6 +68,14 @@
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
 
+/* HTML 의 hidden 속성이 항상 통하게 만듭니다.
+   브라우저 기본값은 `[hidden] { display: none }` 인데, 우리가 같은 요소에
+   display 를 지정하면(예: `.modal { display: grid }`) 그쪽이 이겨 버려
+   hidden 이 무시됩니다. 실제로 프로젝트 모달이 이 문제로 항상 떠 있으면서
+   남색 반투명막 + blur(4px) 로 화면 전체를 뿌옇게 덮고 클릭까지 막고 있었습니다.
+   모달·드로어처럼 hidden 으로 여닫는 요소가 있는 한 이 규칙을 지우지 마세요. */
+[hidden] { display: none !important; }
+
 html {
   scroll-behavior: smooth;
   /* 고정 헤더에 앵커 제목이 가려지지 않도록 */
